@@ -1,3 +1,6 @@
+JIAXIANG HU (jh3648)
+
+Part 1
 (a)OSC book
 3.9 - For context switch, the kernel first saves the context of the old process
 in its PCB, and then loads the saved context of the new process.
@@ -29,3 +32,12 @@ of the parent structure.
  `__mptr`. However, the purpose of the first line is do the type check so that
  it ensures the `type` has `member`. Also, if `ptr` is not the correct type,
  there will be warning message.
+
+ Part 2
+ As the requriemnt from the book, my code creats 5 birthday structure, and
+ then iterates them and output the information.
+
+ Part 3
+ Redo `Part 2` without using inherent macros from `list.h`.
+
+ Part 4
