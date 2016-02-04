@@ -19,8 +19,10 @@ int simple_init(void)
 {
         int i ;
         struct birthday *p;
-        struct birthday *cur, *next;
-        struct list_head *tail;
+        struct birthday *cur;
+        struct list_head *tail, *head_cur, *hprev, *hnext;
+        int cnt = 0;
+        size_t temp_offset;
         printk(KERN_INFO "Loading Module\n");
         for(i = 0; i < 5; i++) {
             p = kmalloc(sizeof(*p), GFP_KERNEL);
@@ -40,15 +42,30 @@ int simple_init(void)
 
             //printk(KERN_DEBUG "%d", p->day);
         }
-        list_for_each_entry(cur, &birthday_list, list) {
+        head_cur = birthday_list.next;
+        while(head_cur != &birthday_list) {
+            // get the current entry
+            temp_offset = (size_t)&(((struct birthday *)0)->list);
+            cur = (struct birthday*)((char *)head_cur -
+                                temp_offset);
+            head_cur = head_cur->next;
             printk(KERN_INFO "day:%d, month:%d, year:%d\n",
                     cur->day, cur->month, cur->year);
         }
-        list_for_each_entry_safe(cur, next, &birthday_list, list) {
-            list_del(&cur->list);
+
+        // free memory
+        head_cur = birthday_list.next;
+        while(head_cur != &birthday_list) {
+            temp_offset = (size_t)&(((struct birthday *)0)->list);
+            cur = (struct birthday*)((char *)head_cur -
+                                temp_offset);
+
+            hprev = head_cur->prev;
+            hnext = head_cur->next;
+            head_cur = hnext;
+            hprev->next = hnext;
             kfree(cur);
         }
-
         return 0;
 }
 
