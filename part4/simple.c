@@ -9,7 +9,8 @@
 
 /* This function is called when the module is loaded. */
 void dfs(struct task_struct *, int);
-const int USER_SCALE = 3;
+const int USER_SCALE = 5;
+const int MAX_INDENT = 20;
 int simple_init(void)
 {
         printk(KERN_INFO "Loading Module\n");
@@ -32,7 +33,10 @@ void dfs(struct task_struct *root, int indent)
             p[i] = ' ';
         p[i] = '\0';
         printk(KERN_INFO "%s\\_[%d]%s\n", p, task->pid, task->comm);
-        dfs(task, indent + 1);
+        if( indent + 1 <= MAX_INDENT )
+            dfs(task, indent + 1);
+        else
+            dfs(task, indent);
         kfree(p);
     }
     return;
