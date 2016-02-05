@@ -17,7 +17,7 @@ int simple_init(void)
 {
         int i ;
         struct birthday *p;
-        struct birthday *cur, *next;
+        struct birthday *cur;
         printk(KERN_INFO "Loading Module\n");
         for(i = 0; i < 5; i++) {
             p = kmalloc(sizeof(*p), GFP_KERNEL);
@@ -32,16 +32,18 @@ int simple_init(void)
             printk(KERN_INFO "day:%d, month:%d, year:%d\n",
                     cur->day, cur->month, cur->year);
         }
-        list_for_each_entry_safe(cur, next, &birthday_list, list) {
-            list_del(&cur->list);
-            kfree(cur);
-        }
+
 
         return 0;
 }
 
 /* This function is called when the module is removed. */
 void simple_exit(void) {
+    struct birthday *cur, *next;
+    list_for_each_entry_safe(cur, next, &birthday_list, list) {
+        list_del(&cur->list);
+        kfree(cur);
+    }
 	printk(KERN_INFO "Removing Module\n");
 }
 

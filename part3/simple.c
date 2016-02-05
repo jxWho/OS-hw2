@@ -20,8 +20,7 @@ int simple_init(void)
         int i ;
         struct birthday *p;
         struct birthday *cur;
-        struct list_head *tail, *head_cur, *hprev, *hnext;
-        int cnt = 0;
+        struct list_head *tail, *head_cur;
         size_t temp_offset;
         printk(KERN_INFO "Loading Module\n");
         for(i = 0; i < 5; i++) {
@@ -53,24 +52,27 @@ int simple_init(void)
                     cur->day, cur->month, cur->year);
         }
 
-        // free memory
-        head_cur = birthday_list.next;
-        while(head_cur != &birthday_list) {
-            temp_offset = (size_t)&(((struct birthday *)0)->list);
-            cur = (struct birthday*)((char *)head_cur -
-                                temp_offset);
-
-            hprev = head_cur->prev;
-            hnext = head_cur->next;
-            head_cur = hnext;
-            hprev->next = hnext;
-            kfree(cur);
-        }
         return 0;
 }
 
 /* This function is called when the module is removed. */
 void simple_exit(void) {
+    struct birthday *cur;
+    struct list_head *head_cur, *hprev, *hnext;
+    size_t temp_offset;
+    // free memory
+    head_cur = birthday_list.next;
+    while(head_cur != &birthday_list) {
+        temp_offset = (size_t)&(((struct birthday *)0)->list);
+        cur = (struct birthday*)((char *)head_cur -
+                            temp_offset);
+
+        hprev = head_cur->prev;
+        hnext = head_cur->next;
+        head_cur = hnext;
+        hprev->next = hnext;
+        kfree(cur);
+    }
 	printk(KERN_INFO "Removing Module\n");
 }
 
