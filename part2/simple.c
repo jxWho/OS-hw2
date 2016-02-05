@@ -40,10 +40,16 @@ int simple_init(void)
 /* This function is called when the module is removed. */
 void simple_exit(void) {
     struct birthday *cur, *next;
+    int cnt = 0;
     list_for_each_entry_safe(cur, next, &birthday_list, list) {
         list_del(&cur->list);
         kfree(cur);
     }
+    cnt = 0;
+    list_for_each_entry(cur, &birthday_list, list) {
+        cnt++;
+    }
+    printk(KERN_INFO "%d entry left\n", cnt);
 	printk(KERN_INFO "Removing Module\n");
 }
 

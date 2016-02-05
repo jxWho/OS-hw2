@@ -60,6 +60,7 @@ void simple_exit(void) {
     struct birthday *cur;
     struct list_head *head_cur, *hprev, *hnext;
     size_t temp_offset;
+    int cnt = 0;
     // free memory
     head_cur = birthday_list.next;
     while(head_cur != &birthday_list) {
@@ -69,10 +70,17 @@ void simple_exit(void) {
 
         hprev = head_cur->prev;
         hnext = head_cur->next;
-        head_cur = hnext;
+        head_cur = head_cur->next;
         hprev->next = hnext;
+        hnext->prev = hprev;
         kfree(cur);
     }
+    head_cur = birthday_list.next;
+    while(head_cur != &birthday_list) {
+        cnt ++;
+        head_cur = head_cur->next;
+    }
+    printk(KERN_INFO "%d entry left\n", cnt);
 	printk(KERN_INFO "Removing Module\n");
 }
 
