@@ -14,7 +14,7 @@ so that the zombie processes can be released from the process table.
 
 (b) LKD book
 1. typeof is a GNU C extension rather than standard C stuff,
-    which refers tho the type of an expression.
+    which refers to the type of an expression.
 
 2. offsetof is a macro in ANSI C library.
 For offestof(type, member),it returns the offset of the field `member` from the
@@ -41,3 +41,4 @@ of the parent structure.
  Redo `Part 2` without using inherent macros from `list.h`.
 
  Part 4
+ Print out the task tree in DFS mode, with maximum indent 20.
